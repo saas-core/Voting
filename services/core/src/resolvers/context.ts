@@ -1,10 +1,7 @@
-export default function createContext({ db, daos }) {
+export default function createContext({ db }) {
   return ({ req }) => {
-    const userId = (req.auth && req.auth.userId) || req.headers.jargonuserid
     return {
-      db,
-      userId,
-      daos,
-    }
-  }
+      db
+    };
+  };
 }
