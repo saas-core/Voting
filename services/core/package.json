@@ -1,0 +1,31 @@
+{
+  "name": "core",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/faker": "^4.1.5",
+    "@types/isomorphic-fetch": "^0.0.35",
+    "@types/jsonwebtoken": "^8.3.2",
+    "@types/lodash": "^4.14.122",
+    "faker": "^4.1.0",
+    "ts-node": "^8.0.2",
+    "typescript": "^3.3.3333"
+  },
+  "dependencies": {
+    "@jargon-pkg/graphql": "^0.0.0",
+    "@jargon-pkg/logger": "^0.0.0",
+    "express": "^4.16.4",
+    "ioredis": "^4.6.2",
+    "isomorphic-fetch": "^2.2.1",
+    "jsonwebtoken": "^8.5.0",
+    "lodash": "^4.17.11",
+    "prisma-client-lib": "^1.27.4"
+  },
+  "scripts": {
+    "start:mock": "MOCK=true yarn start:local",
+    "test-crud": "PRISMA_ENV=local PRISMA_ENDPOINT=localhost:4466 ts-node ./src/__tests__/crud.test.ts",
+    "start:local": "LOCAL=1 PRISMA_ENV=local PRISMA_ENDPOINT=localhost:4466 ts-node ./src/index.ts",
+    "build:prisma:local": "PRISMA_ENV=local PRISMA_ENDPOINT=localhost:4466 prisma deploy"
+  }
+}
