@@ -1,0 +1,14 @@
+# Specifies the HTTP endpoint of your Prisma API.
+endpoint: 'http://${env:PRISMA_ENDPOINT}/core/${env:PRISMA_ENV}'
+
+# Defines your models, each model is mapped to the database as a table.
+datamodel: datamodel.prisma
+
+# Specifies the language and directory for the generated Prisma client.
+generate:
+  - generator: typescript-client
+    output: ../src/generated/prisma-client
+
+hooks:
+  post-deploy:
+    - prisma generate

@@ -1,0 +1,30 @@
+{
+  "name": "@jargon-pkg/graphql",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "description": "GraphQL Type Definitions and Bindings for Services",
+  "scripts": {
+    "clean": "rimraf dist",
+    "build": "yarn clean && yarn typegen && tsc && yarn copy:graphql",
+    "typegen": "ts-node src/typegen/index.ts",
+    "copy:graphql": "copyfiles --verbose --up 1 src/**/*.graphql dist"
+  },
+  "private": true,
+  "devDependencies": {
+    "copyfiles": "^2.1.0",
+    "graphql-code-generator": "^0.18.0",
+    "graphql-codegen-add": "^0.18.0",
+    "graphql-codegen-typescript-common": "^0.18.0",
+    "graphql-codegen-typescript-resolvers": "^0.18.0",
+    "graphql-codegen-typescript-server": "^0.18.0",
+    "rimraf": "^2.6.3"
+  },
+  "dependencies": {
+    "apollo-server-express": "^2.4.8",
+    "graphql": "^14.1.1",
+    "graphql-middleware": "^3.0.2"
+  },
+  "peerDependencies": {
+    "lodash": "4.17.11"
+  }
+}

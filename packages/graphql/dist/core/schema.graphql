@@ -1,0 +1,102 @@
+type Query {
+  ping: String!
+
+  # VOTES
+  voteCountById(id: ID!): VoteCount
+  allVoteCount(pagination: PaginationInput, orderBy: OrderType): [VoteCount]
+
+  #USERS
+  voterByID(id:ID!): Voter
+
+}
+
+type Voter {
+  id: ID!
+  resourceId: ID!
+  name: String
+  displayName: String
+  avatarUrl: String
+  email: String
+  timezone: String
+  timezoneLabel: String
+  votes: [Vote]
+}
+
+type Mutation {
+  createVoter(input: VoterCreateInput!): Voter
+  updateVoter(id: ID!, input: VoterUpdateInput!): Voter
+  deleteVoter(id: ID!): MutationResult
+
+  createVoteCount(input: VoteCountCreateInput!): VoteCount
+  deleteVoteCount(id: ID!): MutationResult
+
+  castVote(voterId: ID!, countId: ID!, input: VoteCreateInput!): MutationResult
+  withdrawVote(voterId: ID!, countId: ID!, voteId: ID!): MutationResult
+  deleteVote(countId: ID!, voteId: ID!): MutationResult
+  changeVote(countId: ID!, input: VoteUpdateInput!): MutationResult
+  changeVoteVoter(voterId: ID!, countId: ID!, input: VoteUpdateInput!): MutationResult
+
+}
+
+input VoterCreateInput {
+  resourceId: ID!
+  name: String!
+  displayName: String!
+  email: String!
+}
+
+input VoterUpdateInput {
+  name: String
+  displayName: String
+  email: String
+}
+
+enum OrderType {
+  total_ASC
+  total_DESC
+  upvotes_ASC
+  upvotes_DESC
+  downvotes_ASC
+  downvotes_DESC
+}
+
+type MutationResult{
+  success: Boolean
+}
+
+type VoteCount {
+  id: ID!
+  resourceId: ID!
+  upvotes: Int!
+  downvotes: Int!
+  total: Int!
+  votes: [Vote]
+}
+
+enum VoteType {
+  UPVOTE
+  DOWNVOTE
+}
+
+input VoteCreateInput{
+  vote: VoteType!
+}
+
+input VoteUpdateInput{
+  id: ID!
+  vote: VoteType!
+}
+
+input VoteCountCreateInput {
+  resourceId: ID!
+}
+
+input PaginationInput {
+  limit: Int
+  offset: Int
+}
+
+type Vote {
+  id: ID!
+  vote: VoteType!
+}

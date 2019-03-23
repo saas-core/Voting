@@ -1,0 +1,70 @@
+
+type VoteCount {
+  id: ID! @unique
+  resourceId: ID!
+  upvotes: Int! @default(value: "0")
+  downvotes: Int! @default(value: "0")
+  total: Int! @default(value: "0")
+  votes: [Vote] @relation(name: "Voted" onDelete: CASCADE)
+}
+
+type Vote {
+  id: ID! @unique
+  vote: VoteType!
+  user: Voter! @relation(name: "VoterVote")
+  voteCount: VoteCount! @relation(name: "Voted")
+}
+
+type User {
+  id: ID! @unique
+  name: String!
+  email: String @unqiue
+  avatarUrl: String
+  title: String
+  displayName: String
+  timezone: String
+  timezoneLabel: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  sources: [SourceNetwork]
+}
+
+type Voter {
+  id: ID! @unique
+  name: String!
+  email: String @unqiue
+  avatarUrl: String
+  title: String
+  displayName: String
+  timezone: String
+  timezoneLabel: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  resourceId: ID!
+  votes: [Vote] @relation(name: "VoterVote" onDelete: CASCADE)
+}
+
+enum OrderType {
+  TOTAL_ASC
+  TOTAL_DESC
+  UPVOTES_ASC
+  UPVOTES_DESC
+  DOWNVOTES_ASC
+  DOWNVOTES_DESC
+}
+
+enum VoteType {
+  UPVOTE
+  DOWNVOTE
+}
+
+type SourceNetwork {
+  id: ID! @unique
+  sourceId: String! 
+  sourceToken: String
+  sourceType: SourceType
+}
+
+enum SourceType {
+  SLACK
+}

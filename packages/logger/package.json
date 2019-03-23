@@ -1,0 +1,36 @@
+{
+  "name": "@jargon-pkg/logger",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "description": "Log4JS Logger",
+  "scripts": {
+    "clean": "rimraf dist",
+    "test": "ts-node ./src/__tests__/index.test.ts",
+    "build": "yarn clean && tsc"
+  },
+  "private": true,
+  "devDependencies": {
+    "@types/jest": "^24.0.9",
+    "jest": "^24.1.0",
+    "jest-preset-typescript": "^1.2.0",
+    "rimraf": "^2.6.3",
+    "ts-jest": "^24.0.0",
+    "ts-node": "^8.0.3",
+    "typescript": "^3.3.3333"
+  },
+  "dependencies": {
+    "log4js": "^4.0.2"
+  },
+  "jest": {
+    "transform": {
+      ".(ts)": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|\\.spec)\\.ts$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json"
+    ]
+  }
+}
