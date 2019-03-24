@@ -4,35 +4,39 @@ import {
   MutationResult,
   VoteCount,
   Voter
-} from "@jargon-pkg/graphql";
+} from "@voting-pkg/graphql";
 import { link } from "fs";
 import { Vote } from "../../generated/prisma-client";
 // import { Link } from "../../generated/prisma-client";
 
-
 export const VoteCountMutation: CoreMutationResolvers.Resolvers<Context> = {
   createVoteCount: async (_parent, { input }, { db }: Context, info) => {
-    return await db.createVoteCount({
+    return (await db.createVoteCount({
       resourceId: input.resourceId
-    }) as VoteCount;
+    })) as VoteCount;
   },
   deleteVoteCount: async (_parent, { id }, { db }: Context, info) => {
     const deletedVoteCount = (await db.deleteVoteCount({
-      id: id,
-    })) as VoteCount
+      id: id
+    })) as VoteCount;
     if (deletedVoteCount) {
-      return { success: true } as MutationResult
+      return { success: true } as MutationResult;
     }
-    return { success: false } as MutationResult
+    return { success: false } as MutationResult;
   },
-  castVote: async (_parent, { voterId, countId, input }, { db }: Context, info) => {
-    const cast = await (db.createVote({
+  castVote: async (
+    _parent,
+    { voterId, countId, input },
+    { db }: Context,
+    info
+  ) => {
+    const cast = (await db.createVote({
       vote: input.vote,
       user: {
         connect: { id: voterId }
       },
       voteCount: {
-        connect: { id: countId}
+        connect: { id: countId }
       }
     })) as Vote;
     var upvote = 0;
@@ -52,8 +56,8 @@ export const VoteCountMutation: CoreMutationResolvers.Resolvers<Context> = {
     //     id: userId
     //   }
     // }) as User;
-    const currentVoteCount = await db.voteCount({ id: countId })
-    const voteCount = await db.updateVoteCount({
+    const currentVoteCount = await db.voteCount({ id: countId });
+    const voteCount = (await db.updateVoteCount({
       data: {
         upvotes: currentVoteCount.upvotes + upvote,
         downvotes: currentVoteCount.downvotes + downvote,
@@ -65,14 +69,19 @@ export const VoteCountMutation: CoreMutationResolvers.Resolvers<Context> = {
       where: {
         id: countId
       }
-    }) as VoteCount;
+    })) as VoteCount;
     if (cast && voteCount) {
-      return { success: true } as MutationResult
+      return { success: true } as MutationResult;
     }
-    return { success: false } as MutationResult
+    return { success: false } as MutationResult;
   },
-  withdrawVote: async (_parent, { voterId, countId, voteId }, { db }: Context, info) => {
-    const cast = await (db.vote({ id: voteId })) as Vote;
+  withdrawVote: async (
+    _parent,
+    { voterId, countId, voteId },
+    { db }: Context,
+    info
+  ) => {
+    const cast = (await db.vote({ id: voteId })) as Vote;
     var upvote = 0;
     var downvote = 0;
     if (cast.vote == "UPVOTE") {
@@ -80,7 +89,7 @@ export const VoteCountMutation: CoreMutationResolvers.Resolvers<Context> = {
     } else {
       downvote = downvote + 1;
     }
-    const voter = await db.updateVoter({
+    const voter = (await db.updateVoter({
       data: {
         votes: {
           delete: { id: cast.id }
@@ -89,25 +98,25 @@ export const VoteCountMutation: CoreMutationResolvers.Resolvers<Context> = {
       where: {
         id: voterId
       }
-    }) as Voter;
-    const currentVoteCount = await db.voteCount({ id: countId })
-    const voteCount = await db.updateVoteCount({
+    })) as Voter;
+    const currentVoteCount = await db.voteCount({ id: countId });
+    const voteCount = (await db.updateVoteCount({
       data: {
         upvotes: currentVoteCount.upvotes - upvote,
         downvotes: currentVoteCount.downvotes - downvote,
-        total: currentVoteCount.total - upvote + downvote,
+        total: currentVoteCount.total - upvote + downvote
       },
       where: {
         id: countId
       }
-    }) as VoteCount;
-    if ( voter && voteCount) {
-      return { success: true } as MutationResult
+    })) as VoteCount;
+    if (voter && voteCount) {
+      return { success: true } as MutationResult;
     }
-    return { success: false } as MutationResult
+    return { success: false } as MutationResult;
   },
   deleteVote: async (_parent, { countId, voteId }, { db }: Context, info) => {
-    const deletedCast = await (db.deleteVote({ id: voteId })) as Vote;
+    const deletedCast = (await db.deleteVote({ id: voteId })) as Vote;
     var upvote = 0;
     var downvote = 0;
     if (deletedCast.vote == "UPVOTE") {
@@ -115,25 +124,25 @@ export const VoteCountMutation: CoreMutationResolvers.Resolvers<Context> = {
     } else {
       downvote = downvote + 1;
     }
-    const currentVoteCount = await db.voteCount({ id: countId })
-    const voteCount = await db.updateVoteCount({
+    const currentVoteCount = await db.voteCount({ id: countId });
+    const voteCount = (await db.updateVoteCount({
       data: {
         upvotes: currentVoteCount.upvotes - upvote,
         downvotes: currentVoteCount.downvotes - downvote,
-        total: currentVoteCount.total - upvote + downvote,
+        total: currentVoteCount.total - upvote + downvote
       },
       where: {
         id: countId
       }
-    }) as VoteCount;
+    })) as VoteCount;
     if (deletedCast && voteCount) {
-      return { success: true } as MutationResult
+      return { success: true } as MutationResult;
     }
-    return { success: false } as MutationResult
+    return { success: false } as MutationResult;
   },
   changeVote: async (_parent, { countId, input }, { db }: Context, info) => {
-    const oldVote = await (db.vote({id: input.id}))
-    const cast = await (db.updateVote({
+    const oldVote = await db.vote({ id: input.id });
+    const cast = (await db.updateVote({
       data: {
         vote: input.vote
       },
@@ -143,7 +152,7 @@ export const VoteCountMutation: CoreMutationResolvers.Resolvers<Context> = {
     })) as Vote;
     var upvote = 0;
     var downvote = 0;
-    if(cast.vote != oldVote.vote){
+    if (cast.vote != oldVote.vote) {
       if (cast.vote == "UPVOTE") {
         upvote = upvote + 1;
         downvote = downvote - 1;
@@ -152,25 +161,30 @@ export const VoteCountMutation: CoreMutationResolvers.Resolvers<Context> = {
         upvote = upvote - 1;
       }
     }
-    const currentVoteCount = await db.voteCount({ id: countId })
-    const voteCount = await db.updateVoteCount({
+    const currentVoteCount = await db.voteCount({ id: countId });
+    const voteCount = (await db.updateVoteCount({
       data: {
         upvotes: currentVoteCount.upvotes + upvote,
         downvotes: currentVoteCount.downvotes + downvote,
-        total: currentVoteCount.total + upvote - downvote,
+        total: currentVoteCount.total + upvote - downvote
       },
       where: {
         id: countId
       }
-    }) as VoteCount;
+    })) as VoteCount;
     if (cast && voteCount) {
-      return { success: true } as MutationResult
+      return { success: true } as MutationResult;
     }
-    return { success: false } as MutationResult
+    return { success: false } as MutationResult;
   },
-  changeVoteVoter: async (_parent, { voterId, countId, input }, { db }: Context, info) => {
-    const oldVote = await (db.vote({id: input.id}))
-    const voter = await (db.updateVoter({
+  changeVoteVoter: async (
+    _parent,
+    { voterId, countId, input },
+    { db }: Context,
+    info
+  ) => {
+    const oldVote = await db.vote({ id: input.id });
+    const voter = await db.updateVoter({
       data: {
         votes: {
           update: {
@@ -186,10 +200,10 @@ export const VoteCountMutation: CoreMutationResolvers.Resolvers<Context> = {
       where: {
         id: voterId
       }
-    }))
+    });
     var upvote = 0;
     var downvote = 0;
-    if(input.vote != oldVote.vote){
+    if (input.vote != oldVote.vote) {
       if (input.vote == "UPVOTE") {
         upvote = upvote + 1;
         downvote = downvote - 1;
@@ -198,21 +212,20 @@ export const VoteCountMutation: CoreMutationResolvers.Resolvers<Context> = {
         upvote = upvote - 1;
       }
     }
-    const currentVoteCount = await db.voteCount({ id: countId })
-    const voteCount = await db.updateVoteCount({
+    const currentVoteCount = await db.voteCount({ id: countId });
+    const voteCount = (await db.updateVoteCount({
       data: {
         upvotes: currentVoteCount.upvotes + upvote,
         downvotes: currentVoteCount.downvotes + downvote,
-        total: currentVoteCount.total + upvote - downvote,
+        total: currentVoteCount.total + upvote - downvote
       },
       where: {
         id: countId
       }
-    }) as VoteCount;
+    })) as VoteCount;
     if (voter && voteCount) {
-      return { success: true } as MutationResult
+      return { success: true } as MutationResult;
     }
-    return { success: false } as MutationResult
-  },
+    return { success: false } as MutationResult;
+  }
 };
-

@@ -1,5 +1,5 @@
 {
-  "name": "@jargon-pkg/logger",
+  "name": "@voting-pkg/logger",
   "version": "0.0.0",
   "main": "dist/index.js",
   "description": "Log4JS Logger",

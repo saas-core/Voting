@@ -1,3 +1,3 @@
-import { Logger } from '@jargon-pkg/logger'
+import { Logger } from "@voting-pkg/logger";
 
-export default new Logger()
+export default new Logger();

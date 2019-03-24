@@ -1,5 +1,5 @@
 {
-  "name": "@jargon-pkg/graphql",
+  "name": "@voting-pkg/graphql",
   "version": "0.0.0",
   "main": "dist/index.js",
   "description": "GraphQL Type Definitions and Bindings for Services",

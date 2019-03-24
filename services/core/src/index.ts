@@ -1,9 +1,8 @@
 import * as express from "express";
-import { createGraphQLServer, coreTypeDefs } from "@jargon-pkg/graphql";
+import { createGraphQLServer, coreTypeDefs } from "@voting-pkg/graphql";
 import { json, urlencoded } from "body-parser";
 import { prisma } from "./generated/prisma-client";
 import createContext from "./resolvers/context";
-//import { jargonSlackAll, jargonByFilter } from './webhooks'
 import createResolvers from "./resolvers";
 import { DataLayer } from "./datalayer";
 import { REDIS_URL } from "./constants";
@@ -15,10 +14,6 @@ const PORT = 4001;
 
 app.use(json());
 
-//app.post('/hooks/slack/all-jargon-objects', urlencoded(), jargonSlackAll)
-
-//app.post('/hooks/slack/filter', urlencoded(), jargonByFilter)
-
 const datalayer = new DataLayer();
 
 datalayer
@@ -28,11 +23,6 @@ datalayer
     }
   })
   .then(({ redis }) => {
-    /**
-     * SLACK WEBHOOKS
-     */
-    //app.post('/hooks/slack/all-jargon-objects', urlencoded(), jargonSlackAll)
-
     // Entry point to the Slack OAuth flow
     // Given a csrfToken, redirect to the
     // Slack OAuth process

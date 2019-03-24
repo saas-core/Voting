@@ -25,7 +25,7 @@ npm manifest:
     },
     "dependencies": {
       "prisma-client-lib": "^1.27.4",
-      "@jargon-pkg/graphql": "^0.0.0"
+      "@voting-pkg/graphql": "^0.0.0"
     },
     "scripts": {
       "test-crud": "PRISMA_ENV=local PRISMA_ENDPOINT=localhost:4466 ts-node ./src/__tests__/crud.test.ts",

@@ -13,8 +13,8 @@
     "typescript": "^3.3.3333"
   },
   "dependencies": {
-    "@jargon-pkg/graphql": "^0.0.0",
-    "@jargon-pkg/logger": "^0.0.0",
+    "@voting-pkg/graphql": "^0.0.0",
+    "@voting-pkg/logger": "^0.0.0",
     "express": "^4.16.4",
     "ioredis": "^4.6.2",
     "isomorphic-fetch": "^2.2.1",
